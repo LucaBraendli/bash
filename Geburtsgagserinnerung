@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Array mit Geburtstagen (Format: "Name;Geburtstag YYYY-MM-DD")
+birthdays=(
+    "Luca Braendli;2007-07-08"
+    "Nicola Braendli;2005-09-23"
+    "Amir Gholamsaki;2007-09-01"
+)
+
+# Überprüfen und Erinnerungen ausgeben
+check_birthdays() {
+    today=$(date +"%m-%d")
+    for entry in "${birthdays[@]}"; do
+        name=$(echo "$entry" | cut -d';' -f1)
+        birthday=$(echo "$entry" | cut -d';' -f2 | cut -d'-' -f2-)
+        if [ "$birthday" == "$today" ]; then
+            echo "Heute hat $name Geburtstag!"
+        fi
+    done
+}
+
+# Hauptfunktion
+main() {
+    check_birthdays
+}
+
+main

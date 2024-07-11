@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Menü für die Woche (Format: "Tag: Gericht")
+menu=(
+    "Montag: Pasta"
+    "Dienstag: Salat"
+    "Mittwoch: Suppe"
+    "Donnerstag: Pizza"
+    "Freitag: Fisch"
+    "Samstag: Steak"
+    "Sonntag: Braten"
+)
+
+# Einkaufslisten basierend auf den Gerichten
+declare -A shopping_list
+shopping_list["Pasta"]="Nudeln, Tomatensauce, Parmesan"
+shopping_list["Salat"]="Salat, Tomaten, Gurken, Dressing"
+shopping_list["Suppe"]="Gemüse, Brühe"
+shopping_list["Pizza"]="Teig, Tomatensauce, Käse, Belag"
+shopping_list["Fisch"]="Fisch, Zitrone, Gewürze"
+shopping_list["Steak"]="Steak, Kartoffeln, Gemüse"
+shopping_list["Braten"]="Fleisch, Kartoffeln, Gemüse"
+
+# Funktion zum Erstellen und Ausgeben der Einkaufsliste
+create_shopping_list() {
+    echo "Einkaufsliste für die Woche:"
+    for day in "${menu[@]}"; do
+        dish=$(echo "$day" | cut -d: -f2 | xargs)
+        echo "$day"
+        echo "  ${shopping_list[$dish]}"
+    done
+    echo "Einkaufsliste erstellt."
+}
+
+# Hauptfunktion
+main() {
+    create_shopping_list
+}
+
+main

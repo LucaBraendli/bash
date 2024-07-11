@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Zielverzeichnis für gespeicherte Passwörter
+password_dir="$HOME/passwords"
+
+# Sicherstellen, dass das Verzeichnis existiert
+mkdir -p "$password_dir"
+
+# Passwortlänge
+password_length=16
+
+# Funktion zum Generieren eines Passworts
+generate_password() {
+    tr -dc 'A-Za-z0-9!@#$%^&*()_+=' < /dev/urandom | head -c "$password_length"
+}
+
+# Funktion zum Speichern des Passworts
+save_password() {
+    service_name=$1
+    password=$(generate_password)
+    echo "$service_name: $password" >> "$password_dir/passwords.txt"
+    echo "Passwort für $service_name gespeichert."
+}
+
+# Hauptfunktion
+main() {
+    echo -n "Service-Name: "
+    read service_name
+    save_password "$service_name"
+}
+
+main

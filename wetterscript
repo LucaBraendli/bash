@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# API-Schlüssel für den Wetterdienst
+api_key="622154d60d1139e5abc2679b8d1e29e7"
+# Stadt für die Wetterabfrage
+city="Zürich"
+# Intervall für die Abfrage (in Sekunden)
+interval=3600
+
+# Funktion zum Abrufen und Anzeigen des Wetters
+get_weather() {
+    weather=$(curl -s "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$api_key&units=metric")
+    temp=$(echo $weather | grep -o '"temp":[^,]*' | cut -d: -f2)
+    description=$(echo $weather | grep -o '"description":"[^"]*' | cut -d: -f2 | tr -d '"')
+    echo "Wetter in $city"
+    echo "Temperatur: ${temp}°C"
+    echo "Beschreibung: $description"
+}
+
+# Hauptfunktion
+main() {
+    while true; do
+        get_weather
+        sleep $interval
+    done
+}
+
+main

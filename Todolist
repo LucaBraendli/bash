@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Datei zum Speichern der Aufgaben
+task_file="$HOME/tasks.txt"
+
+# Sicherstellen, dass die Datei existiert
+touch "$task_file"
+
+# Funktion zum Anzeigen des Menüs
+show_menu() {
+    echo "Aufgabenverwaltung"
+    echo "=================="
+    echo "1. Aufgaben anzeigen"
+    echo "2. Aufgabe hinzufügen"
+    echo "3. Aufgabe als erledigt markieren"
+    echo "4. Aufgabe löschen"
+    echo "5. Beenden"
+    echo -n "Wähle eine Option: "
+}
+
+# Funktion zum Anzeigen der Aufgaben
+list_tasks() {
+    echo "Aufgabenliste"
+    echo "============="
+    if [[ ! -s "$task_file" ]]; then
+        echo "Keine Aufgaben gefunden."
+    else
+        nl -w 2 -s '. ' "$task_file"
+    fi
+    echo
+}
+
+# Funktion zum Hinzufügen einer Aufgabe
+add_task() {
+    echo -n "Gib die neue Aufgabe ein: "
+    read task
+    echo "[ ] $task" >> "$task_file"
+    echo "Aufgabe hinzugefügt."
+}
+
+# Funktion zum Markieren einer Aufgabe als erledigt
+mark_task_done() {
+    list_tasks
+    echo -n "Gib die Nummer der erledigten Aufgabe ein: "
+    read task_number
+    sed -i "${task_number}s/\[ \]/[x]/" "$task_file"
+    echo "Aufgabe als erledigt markiert."
+}
+
+# Funktion zum Löschen einer Aufgabe
+delete_task() {
+    list_tasks
+    echo -n "Gib die Nummer der zu löschenden Aufgabe ein: "
+    read task_number
+    sed -i "${task_number}d" "$task_file"
+    echo "Aufgabe gelöscht."
+}
+
+# Hauptfunktion
+main() {
+    while true; do
+        show_menu
+        read option
+        case $option in
+            1) list_tasks ;;
+            2) add_task ;;
+            3) mark_task_done ;;
+            4) delete_task ;;
+            5) echo "Beenden"; exit 0 ;;
+            *) echo "Ungültige Option. Bitte versuche es erneut." ;;
+        esac
+        echo
+    done
+}
+
+main

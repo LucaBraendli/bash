@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Budget-Kategorien und Beträge
+declare -A budget
+budget["Miete"]=800
+budget["Lebensmittel"]=300
+budget["Transport"]=100
+budget["Unterhaltung"]=50
+budget["Sonstiges"]=150
+
+# Ausgabe-Datei
+budget_file="$HOME/haushaltsbudget.txt"
+
+# Budget erstellen
+create_budget() {
+    echo "Haushaltsbudget für $(date +"%B %Y")" > "$budget_file"
+    for category in "${!budget[@]}"; do
+        echo "$category: ${budget[$category]} EUR" >> "$budget_file"
+    done
+    echo "Budget erstellt: $budget_file"
+}
+
+# Hauptfunktion
+main() {
+    create_budget
+}
+
+main
